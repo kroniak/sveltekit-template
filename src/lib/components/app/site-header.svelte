@@ -1,7 +1,9 @@
 <script lang="ts">
+  import ModeSwitcher from "$lib/components/app/mode-switcher.svelte";
   import { Separator } from "$lib/components/ui/separator";
   import { SidebarTrigger } from "$lib/components/ui/sidebar";
-  import ModeSwitcher from "$lib/components/app/mode-switcher.svelte";
+  import { authClient } from "$lib/auth-client";
+  import { Button } from "$lib/components/ui/button";
   import {
     Breadcrumb,
     BreadcrumbItem,
@@ -10,6 +12,9 @@
     BreadcrumbPage,
     BreadcrumbSeparator,
   } from "$lib/components/ui/breadcrumb";
+
+  const session = authClient.useSession();
+  $: showLogin = !$session.data && $session.isPending === false;
 </script>
 
 <header
@@ -30,6 +35,11 @@
       </BreadcrumbList>
     </Breadcrumb>
     <div class="ms-auto flex items-center gap-2">
+      {#if showLogin}
+        <a href="/auth/login">
+          <Button variant="outline">Log in</Button>
+        </a>
+      {/if}
       <ModeSwitcher />
     </div>
   </div>

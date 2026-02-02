@@ -1,11 +1,8 @@
 <script lang="ts">
   import "./layout.css";
   import favicon from "$lib/assets/favicon.svg";
-
   import { ModeWatcher } from "mode-watcher";
-  import AppSidebar from "$lib/components/app/app-sidebar.svelte";
-  import { SidebarInset, SidebarProvider } from "$lib/components/ui/sidebar";
-  import SiteHeader from "$lib/components/app/site-header.svelte";
+  import { APP_NAME_PREFIX } from "$lib/environment";
 
   let { children } = $props();
 </script>
@@ -20,18 +17,10 @@
   />
 </svelte:head>
 
-<ModeWatcher />
-
-<SidebarProvider
-  style="--sidebar-width: calc(var(--spacing) * 72); --header-height: calc(var(--spacing) * 12);"
->
-  <AppSidebar />
-  <SidebarInset>
-    <SiteHeader />
-    <div class="flex flex-1 flex-col">
-      <div class="@container/main flex min-h-screen flex-1 flex-col gap-2">
-        {@render children()}
-      </div>
-    </div>
-  </SidebarInset>
-</SidebarProvider>
+<ModeWatcher
+  modeStorageKey={`${APP_NAME_PREFIX}.mode`}
+  themeStorageKey={`${APP_NAME_PREFIX}.theme`}
+  defaultMode="system"
+  defaultTheme="mono"
+/>
+{@render children()}
