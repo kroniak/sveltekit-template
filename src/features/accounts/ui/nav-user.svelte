@@ -48,8 +48,8 @@
   {/if}
 {/snippet}
 
-{#if $session.data}
-  <SidebarMenu>
+<SidebarMenu class="h-12">
+  {#if $session.data}
     <SidebarMenuItem>
       <DropdownMenu>
         <DropdownMenuTrigger>
@@ -108,5 +108,5 @@
         </DropdownMenuContent>
       </DropdownMenu>
     </SidebarMenuItem>
-  </SidebarMenu>
-{/if}
+  {/if}
+</SidebarMenu>
