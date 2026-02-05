@@ -20,6 +20,11 @@ export const auth = betterAuth({
       clientId: env.GOOGLE_CLIENT_ID as string,
       clientSecret: env.GOOGLE_CLIENT_SECRET as string,
     },
+    github: {
+      prompt: isProduction ? "select_account" : undefined,
+      clientId: env.GITHUB_CLIENT_ID as string,
+      clientSecret: env.GITHUB_CLIENT_SECRET as string,
+    },
   },
   plugins: [
     sveltekitCookies(getRequestEvent),
