@@ -1,5 +1,11 @@
 <script lang="ts">
-  import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "$lib/components/ui/sidebar/index.js";
+  import { goto } from "$app/navigation";
+  import {
+    SidebarMenu,
+    SidebarMenuButton,
+    SidebarMenuItem,
+    useSidebar,
+  } from "$lib/components/ui/sidebar/index.js";
   import { Avatar, AvatarFallback, AvatarImage } from "$lib/components/ui/avatar";
   import {
     DropdownMenu,
@@ -8,7 +14,7 @@
     DropdownMenuItem,
     DropdownMenuLabel,
     DropdownMenuSeparator,
-    DropdownMenuTrigger
+    DropdownMenuTrigger,
   } from "$lib/components/ui/dropdown-menu";
   import {
     BadgeCheckIcon,
@@ -16,10 +22,11 @@
     ChevronsUpDownIcon,
     CreditCardIcon,
     LogOutIcon,
-    SparklesIcon
+    SparklesIcon,
   } from "@lucide/svelte";
   import { signOut, useSession } from "$lib/auth-client";
   import type { User } from "better-auth";
+  import { page } from "$app/state";
 
   const sidebar = useSidebar();
   const session = useSession();
@@ -29,7 +36,7 @@
   {#if user}
     <Avatar class="size-8 rounded-lg">
       {#if user.image}
-        <AvatarImage src={user.image} alt={user.name}/>
+        <AvatarImage src={user.image} alt={user.name} />
       {:else}
         <AvatarFallback class="rounded-lg">CN</AvatarFallback>
       {/if}
@@ -46,14 +53,14 @@
     <SidebarMenuItem>
       <DropdownMenu>
         <DropdownMenuTrigger>
-          {#snippet child({props})}
+          {#snippet child({ props })}
             <SidebarMenuButton
               size="lg"
               class="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
               {...props}
             >
               {@render userInfo($session.data?.user)}
-              <ChevronsUpDownIcon class="ms-auto size-4"/>
+              <ChevronsUpDownIcon class="ms-auto size-4" />
             </SidebarMenuButton>
           {/snippet}
         </DropdownMenuTrigger>
@@ -68,31 +75,34 @@
               {@render userInfo($session.data?.user)}
             </div>
           </DropdownMenuLabel>
-          <DropdownMenuSeparator/>
+          <DropdownMenuSeparator />
           <DropdownMenuGroup>
             <DropdownMenuItem>
-              <SparklesIcon/>
+              <SparklesIcon />
               Upgrade to Pro
             </DropdownMenuItem>
           </DropdownMenuGroup>
-          <DropdownMenuSeparator/>
+          <DropdownMenuSeparator />
           <DropdownMenuGroup>
             <DropdownMenuItem>
-              <BadgeCheckIcon/>
+              <BadgeCheckIcon />
               Account
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <CreditCardIcon/>
+              <CreditCardIcon />
               Billing
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <BellIcon/>
+              <BellIcon />
               Notifications
             </DropdownMenuItem>
           </DropdownMenuGroup>
-          <DropdownMenuSeparator/>
-          <DropdownMenuItem onclick={async () => await signOut()}>
-            <LogOutIcon/>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem
+            onclick={async () =>
+              await signOut().then(() => goto(`/auth/login?redirect=${page.url.pathname}`))}
+          >
+            <LogOutIcon />
             Log out
           </DropdownMenuItem>
         </DropdownMenuContent>

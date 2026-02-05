@@ -97,8 +97,8 @@ routes/
 **Features-based Organization:**
 
 - `src/features/` - Feature modules with UI components
-    - `accounts/` - Authentication-related components
-    - `dashboard-template/` - Dashboard components (tables, charts, etc.)
+  - `accounts/` - Authentication-related components
+  - `dashboard-template/` - Dashboard components (tables, charts, etc.)
 
 **Library Structure:**
 
