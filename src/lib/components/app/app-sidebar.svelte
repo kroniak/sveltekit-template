@@ -133,6 +133,7 @@
 
 <script lang="ts">
   import NavMain from "./nav-main.svelte";
+  import NavUser from "$features/accounts/ui/nav-user.svelte";
   import SidebarOptInForm from "./sidebar-opt-in-form.svelte";
   import * as Sidebar from "$lib/components/ui/sidebar";
   import GalleryVerticalEndIcon from "@lucide/svelte/icons/gallery-vertical-end";
@@ -170,6 +171,7 @@
     <div class="p-1">
       <SidebarOptInForm />
     </div>
+    <NavUser />
   </Sidebar.Footer>
   <Sidebar.Rail />
 </Sidebar.Root>

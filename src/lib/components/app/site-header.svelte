@@ -2,7 +2,7 @@
   import ModeSwitcher from "$lib/components/app/mode-switcher.svelte";
   import { Separator } from "$lib/components/ui/separator";
   import { SidebarTrigger } from "$lib/components/ui/sidebar";
-  import { authClient } from "$lib/auth-client";
+  import { useSession } from "$lib/auth-client";
   import { Button } from "$lib/components/ui/button";
   import {
     Breadcrumb,
@@ -13,7 +13,7 @@
     BreadcrumbSeparator,
   } from "$lib/components/ui/breadcrumb";
 
-  const session = authClient.useSession();
+  const session = useSession();
   $: showLogin = !$session.data && $session.isPending === false;
 </script>
 

@@ -143,7 +143,7 @@ The project uses **shadcn/ui** components adapted for Svelte with:
 The Prisma client is generated to a **non-standard location**: `src/generated/prisma/client.js`. Always import from:
 
 ```typescript
-import { PrismaClient } from "../generated/prisma/client.js"
+import { PrismaClient } from "../generated/prisma/client.js";
 ```
 
 ### Better Auth Session Access

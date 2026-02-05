@@ -53,3 +53,5 @@ export const signIn = async (provider: string, redirectUrl?: string | null) =>
      */
     newUserCallbackURL: redirectUrl ? `/welcome?redirect=${redirectUrl}` : "/welcome",
   });
+
+export const { signOut, useSession } = authClient;
