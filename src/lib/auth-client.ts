@@ -51,5 +51,5 @@ export const signIn = async (provider: string, redirectUrl?: string | null) =>
     /**
      * A URL to redirect if the user is newly registered
      */
-    newUserCallbackURL: "/welcome",
+    newUserCallbackURL: redirectUrl ? `/welcome?redirect=${redirectUrl}` : "/welcome",
   });
