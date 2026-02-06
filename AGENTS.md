@@ -20,7 +20,7 @@ This project uses **Bun** as the primary package manager (as evidenced by `bun.l
 ### Database Commands
 
 - `npx prisma migrate dev` - Run database migrations in development
-- `npx prisma generate` - Generate Prisma client (outputs to `src/generated/prisma`)
+- `npx prisma generate` - Generate Prisma client (outputs to `src/lib/server/generated`)
 - `npx prisma studio` - Open Prisma Studio to view/edit database
 
 ## Architecture Overview
@@ -34,13 +34,14 @@ This project uses **Bun** as the primary package manager (as evidenced by `bun.l
 
 ### Authentication System
 
-The application uses **Better Auth** with Google OAuth:
+The application uses **Better Auth** with Google and GitHub OAuth:
 
-- Server-side auth configuration: `src/lib/auth.ts`
+- Server-side auth configuration: `src/lib/server/auth.ts`
 - Client-side auth: `src/lib/auth-client.ts`
 - Protected routes are handled via `src/hooks.server.ts`
 - Routes containing `(private)` in their path require authentication
 - Unauthenticated users are redirected to `/auth/login?redirect=<original-path>`
+- Centralized routing definitions in `src/features/routes.ts`
 
 **Environment Variables Required:**
 
@@ -50,6 +51,8 @@ BETTER_AUTH_URL - Application URL (e.g., http://localhost:5173)
 BETTER_AUTH_SECRET - Secret key for auth
 GOOGLE_CLIENT_ID - Google OAuth client ID
 GOOGLE_CLIENT_SECRET - Google OAuth client secret
+GITHUB_CLIENT_ID - GitHub OAuth client ID
+GITHUB_CLIENT_SECRET - GitHub OAuth client secret
 ```
 
 ### Database Architecture
@@ -57,8 +60,9 @@ GOOGLE_CLIENT_SECRET - Google OAuth client secret
 - **PostgreSQL** database with **Prisma ORM**
 - Uses `@prisma/adapter-pg` for native PostgreSQL connection
 - Prisma schema: `prisma/schema.prisma`
-- Generated client outputs to: `src/generated/prisma/client.js`
+- Generated client outputs to: `src/lib/server/generated/client.js`
 - Configuration: `prisma.config.ts`
+- Prisma client singleton: `src/lib/server/prisma.ts`
 
 **Database Models:**
 
@@ -106,9 +110,10 @@ routes/
 - `src/lib/components/ui/` - Reusable shadcn/ui components
 - `src/lib/hooks/` - Svelte hooks/utilities
 - `src/lib/styles/` - Global CSS and layout styles
-- `src/lib/auth.ts` - Server-side Better Auth configuration
+- `src/lib/server/auth.ts` - Server-side Better Auth configuration
+- `src/lib/server/prisma.ts` - Prisma client singleton
+- `src/lib/server/generated/` - Generated Prisma client
 - `src/lib/auth-client.ts` - Client-side auth utilities
-- `src/lib/prisma.ts` - Prisma client singleton
 - `src/lib/environment.ts` - App constants (cookie prefixes, keys)
 - `src/lib/utils.ts` - General utility functions
 
@@ -140,10 +145,16 @@ The project uses **shadcn/ui** components adapted for Svelte with:
 
 ### Prisma Client Location
 
-The Prisma client is generated to a **non-standard location**: `src/generated/prisma/client.js`. Always import from:
+The Prisma client is generated to a **non-standard location**: `src/lib/server/generated/client.js`. Always import from:
 
 ```typescript
-import { PrismaClient } from "../generated/prisma/client.js";
+import { PrismaClient } from "$lib/server/generated/client";
+```
+
+Or use the singleton instance:
+
+```typescript
+import prisma from "$lib/server/prisma";
 ```
 
 ### Better Auth Session Access
@@ -167,3 +178,15 @@ The app uses custom cookie prefixes defined in `src/lib/environment.ts`:
 
 - `APP_COOKIE_PREFIX = "acc"`
 - Cookie names: `acc.session`, `acc.sidebar`, `acc.last_login_method`, etc.
+
+### Centralized Routing System
+
+Routes are defined centrally in `src/features/routes.ts` and organized by feature:
+
+- `$features/application/application-routes.ts` - Application routes
+- `$features/dashboard/dashoard-routes.ts` - Dashboard routes
+- `$features/accounts/accounts-routes.ts` - Authentication routes
+
+Import routes with: `import routes from "$features/routes"`
+
+This allows type-safe route generation with path helpers (e.g., `routes.accounts.pages.login.path()`).

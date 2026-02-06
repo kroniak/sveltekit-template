@@ -10,7 +10,10 @@ declare global {
       session?: Session;
       user?: User;
     }
-    // interface PageData {}
+    interface PageData {
+      session?: Session;
+      user?: User;
+    }
     // interface PageState {}
     // interface Platform {}
   }

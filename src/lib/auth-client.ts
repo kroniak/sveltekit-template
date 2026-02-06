@@ -2,6 +2,16 @@ import { createAuthClient } from "better-auth/svelte";
 import { env } from "$env/dynamic/public";
 import { lastLoginMethodClient } from "better-auth/client/plugins";
 import { LAST_LOGIN_METHOD_KEY } from "$lib/environment";
+import BrandGoogle from "@tabler/icons-svelte/icons/brand-google";
+import BrandGithub from "@tabler/icons-svelte/icons/brand-github";
+import type { Icon } from "@tabler/icons-svelte";
+
+export type OAuth2Providers = { id: string; name: string; icon: Icon };
+
+export const oAuth2Providers: OAuth2Providers[] = [
+  { id: "google", name: "Google", icon: BrandGoogle },
+  { id: "github", name: "GitHub", icon: BrandGithub },
+] as const;
 
 /**
  * An authentication client instance for handling user authentication and authorization.

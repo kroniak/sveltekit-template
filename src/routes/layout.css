@@ -172,7 +172,10 @@
   }
   button:not(:disabled),
   [role="button"]:not(:disabled) {
-    cursor: pointer;
+    @apply cursor-pointer;
     @apply active:scale-95;
+  }
+  [role="menuitem"] {
+    @apply cursor-pointer!;
   }
 }
