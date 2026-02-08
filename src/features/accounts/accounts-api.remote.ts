@@ -6,7 +6,7 @@ import {
   revokeSessionSchema,
   unlinkAccountSchema,
   updateProfileSchema,
-} from "./account-schemas";
+} from "./accounts-schemas";
 import routes from "$features/routes";
 import type { Session, User } from "better-auth";
 
